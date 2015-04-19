@@ -117,11 +117,11 @@ bool NimSyntaxHighlighter::matchComment(const QString& ref, int& i)
 bool NimSyntaxHighlighter::matchSkipChar(const QString& ref, int& i)
 {
     static bool firstTime = true;
-    static QSet<QChar> skipChars ({' ', '+', '-',
+    static QSet<QChar> skipChars {{' ', '+', '-',
                                    '*', '[', ']',
                                    '{', '}', '%',
                                    '\\', '\n', '\r',
-                                   '\t'});
+                                   '\t'}};
     if (firstTime) {
         skipChars.squeeze();
         firstTime = false;
