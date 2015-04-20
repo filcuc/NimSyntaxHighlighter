@@ -14,7 +14,6 @@ class NimSyntaxHighlighter : public QSyntaxHighlighter
 
     enum BlockState { DefaultBlockState = -1,
                       MultiLineStringBlockState = 0};
-
 public:
     NimSyntaxHighlighter(QTextDocument* parent = 0);
 

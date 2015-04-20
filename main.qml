@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import QtQuick.Window 2.0
 import QtQuick.Dialogs 1.2
+import AporiaQt 1.0
 
 ApplicationWindow {
     width: 800
@@ -43,8 +44,18 @@ ApplicationWindow {
         anchors.fill: parent
         text: applicationLogic.text
         Component.onCompleted: {
-            console.log(textArea.textDocument)
             applicationLogic.setDocument(textArea.textDocument)
         }
+        Keys.priority: Keys.BeforeItem
+        Keys.forwardTo: keyHandler
+        cursorPosition: keyHandler.cursor.position
+        onCursorPositionChanged: keyHandler.cursor.position = cursorPosition
     }
+
+    TextAreaKeyHandler {
+        id: keyHandler
+        document: textArea.textDocument
+    }
+
+
 }

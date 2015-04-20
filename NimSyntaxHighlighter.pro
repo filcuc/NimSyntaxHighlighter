@@ -15,11 +15,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     nimsyntaxhighlighter.cpp \
-    applicationlogic.cpp
+    applicationlogic.cpp \
+    textareakeyhandler.cpp \
+    textcursor.cpp
 
 HEADERS  += \
     nimsyntaxhighlighter.h \
-    applicationlogic.h
+    applicationlogic.h \
+    textareakeyhandler.h \
+    textcursor.h
 
 FORMS    +=
 
