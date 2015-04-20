@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QQueue>
+#include <QList>
 #include <QTextCursor>
 #include "textcursor.h"
 
@@ -13,6 +14,14 @@ class TextAreaKeyHandler : public QQuickItem
 
     Q_PROPERTY(QQuickTextDocument* document READ document WRITE setDocument NOTIFY documentChanged)
     Q_PROPERTY(TextCursor* cursor READ textCursor NOTIFY textCursorChanged)
+
+    struct KeyEvent
+    {
+        enum Type { Press, Release };
+        int key;
+        Type type;
+        Qt::KeyboardModifiers modifier;
+    };
 
 public:
     TextAreaKeyHandler();
@@ -38,7 +47,7 @@ private:
     QQuickTextDocument *m_document;
     QScopedPointer<TextCursor> m_cursor;
     QScopedPointer<QElapsedTimer> m_timer;
-    QQueue<QKeyEvent> m_events;
+    QList<KeyEvent> m_events;
 };
 
 
