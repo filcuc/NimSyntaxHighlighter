@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     nimsyntaxhighlighter.cpp \
     applicationlogic.cpp \
     textareakeyhandler.cpp \
-    textcursor.cpp
+    textcursor.cpp \
+    nimlexer.cpp
 
 HEADERS  += \
     nimsyntaxhighlighter.h \
     applicationlogic.h \
     textareakeyhandler.h \
-    textcursor.h
+    textcursor.h \
+    nimlexer.h
 
 FORMS    +=
 
