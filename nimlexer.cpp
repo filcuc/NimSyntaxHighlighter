@@ -1,7 +1,6 @@
 #include "nimlexer.h"
 #include <QSet>
 #include <QRegularExpression>
-#include <QDebug>
 
 class SourceCodeStream
 {
@@ -18,9 +17,14 @@ public:
         m_markedPosition = m_position;
     }
 
-    inline void move(uint pos = 1)
+    inline void move()
     {
-        m_position += pos;
+        ++m_position;
+    }
+
+    inline void moveToEnd()
+    {
+        m_position = m_textLength;
     }
 
     inline int pos()
@@ -85,8 +89,10 @@ NimLexer::Token NimLexer::next()
 {
     switch (m_state)
     {
-    case State::MultiLineString: return onMultiLineStringState();
-    default: return onDefaultState();
+    case State::MultiLineString:
+        return onMultiLineStringState();
+    default:
+        return onDefaultState();
     }
 }
 
@@ -94,11 +100,14 @@ NimLexer::Token NimLexer::onDefaultState()
 {
     while (!m_stream->isEnd())
     {
-        qDebug() << "Position" << m_stream->pos();
         if (isSkipChar(m_stream)) {
             m_stream->move();
             continue;
         }
+        if (matchDocumentationStart(m_stream))
+            return readDocumentation(m_stream);
+        if (matchCommentStart(m_stream))
+            return readComment(m_stream);
         if (matchMultiLineStringLiteralStart(m_stream))
             return readMultiLineStringLiteral(m_stream, true);
         if (matchStringLiteralStart(m_stream))
@@ -124,6 +133,30 @@ bool NimLexer::isSkipChar(SourceCodeStream* stream)
     return skipChars.contains(stream->peek());
 }
 
+bool NimLexer::matchCommentStart(SourceCodeStream* stream)
+{
+    return stream->peek() == '#' && stream->peek(1) != '#';
+}
+
+NimLexer::Token NimLexer::readComment(SourceCodeStream* stream)
+{
+    stream->setAnchor();
+    stream->moveToEnd();
+    return Token(stream->anchor(), stream->length(), TokenType::Comment);
+}
+
+bool NimLexer::matchDocumentationStart(SourceCodeStream* stream)
+{
+    return stream->peek() == '#' && stream->peek(1) == '#';
+}
+
+NimLexer::Token NimLexer::readDocumentation(SourceCodeStream* stream)
+{
+    stream->setAnchor();
+    stream->moveToEnd();
+    return Token(stream->anchor(), stream->length(), TokenType::Documentation);
+}
+
 bool NimLexer::matchIdentifierOrKeywordStart(SourceCodeStream* stream)
 {
     static QRegularExpression isLetter {"[a-zA-Z\x80-\xFF]"};
@@ -138,7 +171,7 @@ NimLexer::Token NimLexer::readIdentifierOrKeyword(SourceCodeStream* stream)
                                    "while", "cbool", "tuple", "defer", // 5
                                    "cint", "case", "bool", "proc", "type",
                                    "else", "from", "enum", "when", // 4
-                                   "int", "var", "for", // 3
+                                   "int", "var", "for", "ref", // 3
                                    "in", "of", "if" }; // 2
     stream->setAnchor();
     stream->move();

@@ -16,6 +16,8 @@ public:
     enum class TokenType {
         Keyword,
         Identifier,
+        Comment,
+        Documentation,
         StringLiteral,
         MultiLineStringLiteral,
         EndOfText
@@ -49,6 +51,12 @@ private:
     Token onMultiLineStringState();
 
     bool isSkipChar(SourceCodeStream* stream);
+
+    bool matchCommentStart(SourceCodeStream* stream);
+    Token readComment(SourceCodeStream* stream);
+
+    bool matchDocumentationStart(SourceCodeStream* stream);
+    Token readDocumentation(SourceCodeStream* stream);
 
     bool matchIdentifierOrKeywordStart(SourceCodeStream* stream);
     Token readIdentifierOrKeyword(SourceCodeStream* stream);

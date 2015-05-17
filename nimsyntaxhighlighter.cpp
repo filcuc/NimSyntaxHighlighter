@@ -56,6 +56,10 @@ void NimSyntaxHighlighter::highlightBlock(const QString& ref)
         case NimLexer::TokenType::MultiLineStringLiteral:
             setFormat(token.begin, token.length, m_format[StringLiteralToken]);
             break;
+        case NimLexer::TokenType::Comment:
+        case NimLexer::TokenType::Documentation:
+            setFormat(token.begin, token.length,m_format[CommentToken]);
+            break;
         case NimLexer::TokenType::EndOfText:
             setCurrentBlockState(lexer.state());
             return;
