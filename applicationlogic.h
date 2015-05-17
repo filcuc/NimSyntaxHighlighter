@@ -16,7 +16,6 @@ public:
     Q_INVOKABLE void openFile(const QString& path);
     Q_INVOKABLE void onOpenTriggered();
     Q_INVOKABLE void setDocument(QQuickTextDocument* document);
-
     QString text() const;
 
 public slots:
