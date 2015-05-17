@@ -104,6 +104,8 @@ NimLexer::Token NimLexer::onDefaultState()
             m_stream->move();
             continue;
         }
+        if (isOperator(m_stream))
+            return readOperator(m_stream);
         if (matchDocumentationStart(m_stream))
             return readDocumentation(m_stream);
         if (matchCommentStart(m_stream))
@@ -131,6 +133,20 @@ bool NimLexer::isSkipChar(SourceCodeStream* stream)
 {
     static QSet<QChar> skipChars {' ', '\t'};
     return skipChars.contains(stream->peek());
+}
+
+bool NimLexer::isOperator(SourceCodeStream* stream)
+{
+    static QSet<QChar> operators {'+', '-', '*', '/', '\\', '<', '>', '!', '?', '^', '.',
+                                  '|', '=', '%', '&', '$', '@', '~', ':' };
+    return operators.contains(stream->peek());
+}
+
+NimLexer::Token NimLexer::readOperator(SourceCodeStream* stream)
+{
+    stream->setAnchor();
+    stream->move();
+    return Token(stream->anchor(), stream->length(), TokenType::Operator);
 }
 
 bool NimLexer::matchCommentStart(SourceCodeStream* stream)

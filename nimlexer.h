@@ -20,7 +20,8 @@ public:
         Documentation,
         StringLiteral,
         MultiLineStringLiteral,
-        EndOfText
+        Operator,
+        EndOfText,
     };
 
     struct Token {
@@ -51,6 +52,9 @@ private:
     Token onMultiLineStringState();
 
     bool isSkipChar(SourceCodeStream* stream);
+
+    bool isOperator(SourceCodeStream* stream);
+    Token readOperator(SourceCodeStream* stream);
 
     bool matchCommentStart(SourceCodeStream* stream);
     Token readComment(SourceCodeStream* stream);

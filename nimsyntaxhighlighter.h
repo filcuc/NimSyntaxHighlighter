@@ -12,7 +12,8 @@ class NimSyntaxHighlighter : public QSyntaxHighlighter
                  KeywordToken,
                  CommentToken,
                  StringLiteralToken,
-                 NumberLiteralToken};
+                 NumberLiteralToken,
+                 OperatorToken};
 public:
     NimSyntaxHighlighter(QTextDocument* parent = 0);
 

@@ -35,6 +35,12 @@ NimSyntaxHighlighter::NimSyntaxHighlighter(QTextDocument* parent)
         format.setForeground(QColor("blue"));
         m_format[NumberLiteralToken] = format;
     }
+
+    {
+        QTextCharFormat format;
+        format.setForeground(QColor("orange"));
+        m_format[OperatorToken] = format;
+    }
 }
 
 void NimSyntaxHighlighter::highlightBlock(const QString& ref)
@@ -55,6 +61,9 @@ void NimSyntaxHighlighter::highlightBlock(const QString& ref)
         case NimLexer::TokenType::StringLiteral:
         case NimLexer::TokenType::MultiLineStringLiteral:
             setFormat(token.begin, token.length, m_format[StringLiteralToken]);
+            break;
+        case NimLexer::TokenType::Operator:
+            setFormat(token.begin, token.length, m_format[OperatorToken]);
             break;
         case NimLexer::TokenType::Comment:
         case NimLexer::TokenType::Documentation:
